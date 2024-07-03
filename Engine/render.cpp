@@ -6,6 +6,7 @@ unsigned char prevKey;
 #include <stdio.h>
 
 #include "engine.h"
+  #include <math.h>
 
 namespace RenderEngine
 {
@@ -94,6 +95,16 @@ void (*opengl::loop )() = nullptr;
 void (*opengl::start)() = nullptr;
 
 
+
+void RenderString(float x, float y, void *font, const char* string, float r, float g, float b)
+{  
+  char *c;
+
+  glColor3f(r,g,b); 
+  glRasterPos2f(x, y);
+
+  glutBitmapString(font, (unsigned char*)string);
+}
 
   void Enabled(bool state)
   {
@@ -198,21 +209,22 @@ void (*opengl::start)() = nullptr;
   //         glVertex4f(topLeft.x, topLeft.y, topLeft.z, topLeft.w);
   //     glEnd();
   // }
+//
 
-  // void circle(Vector3 center, double r, double segments = 1000){
-  //   double π = 3.14159; 
-  //   glBegin(GL_POLYGON);
-  //   for (int i = 0; i< segments; i++)
-  //   {
-  //     double θ = 2.0f * π * i/segments;
 
-  //     float x = r * cosf(θ);
-  //     float y = r * sinf(θ);
+  void circle(Vector3 center, double r, double segments){
+    double π = 3.14159; 
+    glBegin(GL_POLYGON);
+    for (int i = 0; i< segments; i++)
+    {
+      double θ = 2.0f * π * i/segments;
 
-  //     glVertex4f(x, y, center.x, center.w);
-  //   }
-  //   glEnd();
-  // }
-  // };
+      float x = r * cosf(θ);
+      float y = r * sinf(θ);
+
+      glVertex4f(x, y, center.x, center.w);
+    }
+    glEnd();
+  }
 }
 

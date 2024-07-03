@@ -1,0 +1,2 @@
+g++ Projects/double-pendulum/main.cpp Engine/render.cpp Engine/math.cpp Engine/game.cpp -o Projects/double-pendulum/main -lGL -lGLU -lglut -ldl -lm -lglfw -lGLEW -lXi -lXmu  
+

@@ -154,6 +154,7 @@ namespace RenderEngine
   void circle(Vector3 center, double r, double segments = 1000);
 
   
+void RenderString(float x, float y, void *font, const char* string, float r, float g, float b);
 
   // class primitives;
 }

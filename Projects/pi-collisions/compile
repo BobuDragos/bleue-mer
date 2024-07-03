@@ -1,0 +1,1 @@
+g++ Projects/pi-collisions/main.cpp Engine/render.cpp Engine/math.cpp Engine/game.cpp -o Projects/pi-collisions/main -lGL -lGLU -lglut -ldl -lm -lglfw -lGLEW -lXi -lXmu  && g++ Projects/pi-collisions/runner.cpp Engine/render.cpp Engine/math.cpp Engine/game.cpp -o Projects/pi-collisions/runner -lGL -lGLU -lglut -ldl -lm -lglfw -lGLEW -lXi -lXmu

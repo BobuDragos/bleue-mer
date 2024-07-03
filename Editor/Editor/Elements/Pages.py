@@ -41,6 +41,8 @@ from Editor.Editor.Elements.Tabs.Assets import AssetsTab
 from Editor.Editor.Elements.Tabs.Terminal  import TerminalTab
 from Editor.Editor.Elements.Tabs.Hierarchy import HierarchyTab
 
+from Editor.Editor.Elements.Tabs.SceneView import SceneView
+from Editor.Editor.Elements.Tabs.Inspector import Inspector
 
 class ProjectPage(QMainWindow):
     def GetWindowSize():
@@ -228,7 +230,7 @@ class ProjectPage(QMainWindow):
         tabWidget2 = QTabWidget()
         tabWidget2.tabBar().setMovable(True)
         tabWidget2.setStyleSheet("background-color: green;")
-        sceneViewWidget = QWidget()
+        sceneViewWidget = SceneView()
         sceneViewWidget.setObjectName("sceneView")
         sceneViewWidget.setMinimumSize(400, 400)
         sceneViewWidget.resize(900, 600)
@@ -268,7 +270,7 @@ class ProjectPage(QMainWindow):
         tabWidget4 = QTabWidget()
         tabWidget4.tabBar().setMovable(True)
         tabWidget4.setStyleSheet("background-color: yellow;")
-        inspectorWidget = QWidget()
+        inspectorWidget = Inspector()
         inspectorWidget.setObjectName("inspector")
         inspectorWidget.setMinimumWidth(200)
         inspectorWidget.resize(300, 800)

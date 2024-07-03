@@ -1,0 +1,2 @@
+g++ Projects/terrain-perlin-noise/main.cpp Engine/render.cpp Engine/math.cpp Engine/game.cpp -o Projects/terrain-perlin-noise/main -lGL -lGLU -lglut -ldl -lm -lglfw -lGLEW -lXi -lXmu  
+

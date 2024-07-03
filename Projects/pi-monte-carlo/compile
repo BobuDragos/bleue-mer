@@ -1,0 +1,1 @@
+g++ Projects/pi-monte-carlo/main.cpp Engine/render.cpp Engine/math.cpp Engine/game.cpp -o Projects/pi-monte-carlo/main -lGL -lGLU -lglut -ldl -lm -lglfw -lGLEW -lXi -lXmu  && g++ Projects/pi-monte-carlo/runner.cpp Engine/render.cpp Engine/math.cpp Engine/game.cpp -o Projects/pi-monte-carlo/runner -lGL -lGLU -lglut -ldl -lm -lglfw -lGLEW -lXi -lXmu

@@ -1,0 +1,2 @@
+g++ Projects/julia/main.cpp Engine/render.cpp Engine/math.cpp Engine/game.cpp -o Projects/julia/main -lGL -lGLU -lglut -ldl -lm -lglfw -lGLEW -lXi -lXmu  
+

@@ -1,0 +1,2 @@
+g++ Projects/tic-tac-toe/main.cpp Engine/render.cpp Engine/math.cpp Engine/game.cpp -o Projects/tic-tac-toe/main -lGL -lGLU -lglut -ldl -lm -lglfw -lGLEW -lXi -lXmu  
+

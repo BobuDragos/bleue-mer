@@ -1,3 +1,41 @@
+
+
+
+#include <iostream>
+#include <string>
+#include <array>
+#include <memory>
+#include <future>
+#include <sstream>
+
+std::string exec(const char* cmd) {
+    std::array<char, 128> buffer;
+    std::string result;
+    std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    while (!feof(pipe.get())) {
+        if (fgets(buffer.data(), 128, pipe.get()) != nullptr)
+            result += buffer.data();
+    }
+    return result;
+}
+
+// Function to convert a char matrix to a string
+std::string boardToString(const char board[3][3]) {
+    std::ostringstream oss;
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            oss << board[i][j];
+        }
+        if (i < 2) {
+            oss << '\n'; // Add newline to separate rows
+        }
+    }
+    return oss.str();
+}
+
+
+
 #include "../../Engine/engine.h"
 
 const int BOARD_SIZE = 3;
@@ -35,6 +73,12 @@ const char AI = 'O';
 
 void update();
 
+
+
+std::string output;
+std::future<std::string> futureOutput;
+std::string command;
+std::string message;
 int main()
 {
     RenderEngine::setStart([]() {
@@ -66,6 +110,19 @@ int main()
 
         centers[8].x = (K.x + P.x) / 2;
         centers[8].y = (K.y + P.y) / 2;
+
+
+        message = "tic tac toe but greet player";
+        command = "python3 Modules/openai/test.py \"" + message + "\"";
+        // Run the exec function asynchronously
+        futureOutput = std::async(std::launch::async, exec, command.c_str());
+
+        output = futureOutput.get();
+
+        std::string message = "tic tac toe";
+        command = "python3 Modules/openai/test.py \"" + message + "\"";
+        // Run the exec function asynchronously
+        futureOutput = std::async(std::launch::async, exec, command.c_str());
     });
     RenderEngine::setUpdate(update);
     RenderEngine::Enabled(true);
@@ -264,6 +321,7 @@ RenderEngine::line(B, N);
 RenderEngine::line(C, O);
 
 }
+#include <GL/freeglut.h>
 
 void update()
 {
@@ -271,6 +329,9 @@ void update()
     RenderEngine::stroke(0);
     RenderEngine::strokeWeight(10);
   drawGrid();
+
+
+      RenderEngine::RenderString(-1, 0, GLUT_BITMAP_TIMES_ROMAN_24, output.c_str(), 0, 0, 0);
     float w = 1.0f / 3;
     float h = 1.0f / 3;
     int center_idx = 0;
@@ -351,215 +412,20 @@ void update()
     }
     else
     {
-        // AI's turn
-        findBestMove(board);
-        playerTurn = true; // Switch to player's turn
+      message = "tic tac toe";
+      command = "python3 Modules/openai/test.py \"" + message + boardToString(board) + "\"";
+
+
+      output = futureOutput.get();
+
+
+      // Run the exec function asynchronously
+      futureOutput = std::async(std::launch::async, exec, command.c_str());
+        // std::string command = "python3 Modules/openai/test.py 5";
+        // output = exec(command.c_str());
+          // AI's turn
+      findBestMove(board);
+      playerTurn = true; // Switch to player's turn
     }
 }
-
-
-// #include "../../Engine/engine.h"
-
-// void start();
-// void update();
-
-// int main()
-// {
-//   // RenderEngine::setAwake(awake);
-//   RenderEngine::setStart(start);
-//   RenderEngine::setUpdate(update);
-//   // RenderEngine::setFixedUpdate(fixedUpdate);
-//   RenderEngine::Enabled(true);
-// }
-
-
-// const int BOARD_SIZE = 3;
-// char board[BOARD_SIZE][BOARD_SIZE] = {
-//   {' ', ' ', ' '},
-//   {' ', ' ', ' '},
-//   {' ', ' ', ' '}
-// };
-
-// void start()
-// {
-//   RenderEngine::background(0);
-//   RenderEngine::strokeWeight(10);
-
-//   // for (int i = 0; i < BOARD_SIZE; ++i) {
-//   //   for (int j = 0; j < BOARD_SIZE; ++j) {
-//   //     GameObject& cell = cells[i][j];
-//   //     cell.transform.position = Vector3(BOARD_OFFSET_X + j * CELL_SIZE + CELL_SIZE / 2, BOARD_OFFSET_Y + i * CELL_SIZE + CELL_SIZE / 2);
-//   //     cell.transform.scale = Vector3(CELL_SIZE - 10, CELL_SIZE - 10);
-//   //     cell.renderer.color = Color::white;
-
-
-//   //     cell.show();
-//   //   }
-//   // }
-
-//   // dvd.rigidbody.velocity       = Vector3(0.01, 0.001);
-
-//   // vWalls[0].transform.position = Vector3(-1,  0);
-//   // vWalls[0].transform.scale    = Vector3(0.01, 2);
-//   // 
-//   // vWalls[1].transform.position = Vector3( 1,  0);
-//   // vWalls[1].transform.scale    = Vector3(0.01, 2);
-
-//   // hWalls[0].transform.position = Vector3( 0, -1);
-//   // hWalls[0].transform.scale    = Vector3(2, 0.01);
-//   // 
-//   // hWalls[1].transform.position = Vector3( 0,  1);
-//   // hWalls[1].transform.scale    = Vector3(2, 0.01);
-// }
-
-
-
-// Vector3 centers[9];
-
-
-
-
-// // A ----      B ----      C----      D
-// // -           -           -         -
-// // -           -           -         -
-// // E-----      F-----      G-----     H
-// // -           -          -           -
-// // -           -          -          -
-// // I-----       J-----     K-----     L
-// // -           -          -           -
-// // -           -          -          -
-// // M-----      N-----     O-----      P
-
-
-
-// void update()
-// {
-
-//   RenderEngine::background(Color(255));
-
-//   float w = 1.0f / 3;
-//   float h = 1.0f / 3;
-
-//   RenderEngine::strokeWeight(10);
-//   RenderEngine::stroke(Color(0));
-
-
-//   // RenderEngine::line(Vector3(0.2, 0.1) , Vector3(0.7, 0.1));
-
-
-
-// Vector3 A = Vector3(-0.5f, 0.75f);
-// Vector3 B = Vector3(-0.1667f, 0.75f);
-// Vector3 C = Vector3(0.1667f, 0.75f);
-// Vector3 D = Vector3(0.5f, 0.75f);
-
-// Vector3 E = Vector3(-0.5f, 0.5833f);
-// Vector3 F = Vector3(-0.1667f, 0.5833f);
-// Vector3 G = Vector3(0.1667f, 0.5833f);
-// Vector3 H = Vector3(0.5f, 0.5833f);
-
-// Vector3 I = Vector3(-0.5f, 0.4166f);
-// Vector3 J = Vector3(-0.1667f, 0.4166f);
-// Vector3 K = Vector3(0.1667f, 0.4166f);
-// Vector3 L = Vector3(0.5f, 0.4166f);
-
-// Vector3 M = Vector3(-0.5f, 0.25f);
-// Vector3 N = Vector3(-0.1667f, 0.25f);
-// Vector3 O = Vector3(0.1667f, 0.25f);
-// Vector3 P = Vector3(0.5f, 0.25f);
-
-// ///// OUTSIDE
-// // TOP
-// RenderEngine::line(A, D);
-// // LEFT
-// RenderEngine::line(A, M);
-// // RIGHT
-// RenderEngine::line(D, P);
-// // BOTTOM
-// RenderEngine::line(M, P);
-
-// ///// INSIDE
-// RenderEngine::line(E, H);
-// RenderEngine::line(I, L);
-// RenderEngine::line(B, N);
-// RenderEngine::line(C, O);
-
-
-//     centers[0].x = (A.x + F.x) / 2;
-//     centers[0].y = (A.y + F.y) / 2;
-
-//     centers[1].x = (B.x + G.x) / 2;
-//     centers[1].y = (B.y + G.y) / 2;
-
-//     centers[2].x = (C.x + H.x) / 2;
-//     centers[2].y = (C.y + H.y) / 2;
-
-//     centers[3].x = (E.x + J.x) / 2;
-//     centers[3].y = (E.y + J.y) / 2;
-
-//     centers[4].x = (F.x + K.x) / 2;
-//     centers[4].y = (F.y + K.y) / 2;
-
-//     centers[5].x = (G.x + L.x) / 2;
-//     centers[5].y = (G.y + L.y) / 2;
-
-//     centers[6].x = (I.x + N.x) / 2;
-//     centers[6].y = (I.y + N.y) / 2;
-
-//     centers[7].x = (J.x + O.x) / 2;
-//     centers[7].y = (J.y + O.y) / 2;
-
-//     centers[8].x = (K.x + P.x) / 2;
-//     centers[8].y = (K.y + P.y) / 2;
-
-//   int center_idx = 0;
-//     // Render squares
-//   for (int i = 0; i < BOARD_SIZE; ++i) 
-//   {
-//     for (int j = 0; j < BOARD_SIZE; ++j) 
-//     {
-//       Vector3 size(0.25, 0.1); // Example size for the rectangles
-
-//       if (board[i][j] == 'X') {
-//         RenderEngine::stroke(Color::red);
-//       } else if (board[i][j] == 'O') {
-//         RenderEngine::stroke(Color::blue);
-//       } else if (board[i][j] == ' ') {
-//         RenderEngine::stroke(Color::white);
-//       }
-
-//       RenderEngine::rect(centers[center_idx++], size);
-//     }
-//   }
-
-//         if (GameEngine::Input::getKeyDown(GameEngine::KEY_Q) && board[0][0] == ' ') {
-//             board[0][0] = 'X';
-//         }
-//         if (GameEngine::Input::getKeyDown(GameEngine::KEY_W) && board[0][1] == ' ') {
-//             board[0][1] = 'X';
-//         }
-//         if (GameEngine::Input::getKeyDown(GameEngine::KEY_E) && board[0][2] == ' ') {
-//             board[0][2] = 'X';
-//         }
-//         if (GameEngine::Input::getKeyDown(GameEngine::KEY_R) && board[1][0] == ' ') {
-//             board[1][0] = 'X';
-//         }
-//         if (GameEngine::Input::getKeyDown(GameEngine::KEY_T) && board[1][1] == ' ') {
-//             board[1][1] = 'X';
-//         }
-//         if (GameEngine::Input::getKeyDown(GameEngine::KEY_Y) && board[1][2] == ' ') {
-//             board[1][2] = 'X';
-//         }
-//         if (GameEngine::Input::getKeyDown(GameEngine::KEY_U) && board[2][0] == ' ') {
-//             board[2][0] = 'X';
-//         }
-//         if (GameEngine::Input::getKeyDown(GameEngine::KEY_I) && board[2][1] == ' ') {
-//             board[2][1] = 'X';
-//         }
-//         if (GameEngine::Input::getKeyDown(GameEngine::KEY_O) && board[2][2] == ' ') {
-//             board[2][2] = 'X';
-//         }
-// }
-
-
 

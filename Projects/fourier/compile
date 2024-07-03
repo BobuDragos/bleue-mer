@@ -1,0 +1,1 @@
+g++ Projects/fourier/main.cpp Engine/render.cpp Engine/math.cpp Engine/game.cpp -o Projects/fourier/main -lGL -lGLU -lglut -ldl -lm -lglfw -lGLEW -lXi -lXmu  && g++ Projects/fourier/runner.cpp Engine/render.cpp Engine/math.cpp Engine/game.cpp -o Projects/fourier/runner -lGL -lGLU -lglut -ldl -lm -lglfw -lGLEW -lXi -lXmu
