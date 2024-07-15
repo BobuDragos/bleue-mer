@@ -2,6 +2,7 @@ import sys
 from openai import OpenAI
 
 # Initialize the OpenAI client
+ client = OpenAI(api_key='sk-proj-RQzckXMz5sEX6N7q4KWLT3BlbkFJvcCZbKSnmxdPNh83PIo0')  # Replace with your actual API key
 
 
 

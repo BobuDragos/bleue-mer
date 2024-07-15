@@ -1,0 +1,2 @@
+g++ Projects/dvd_bouncer/main.cpp Engine/render.cpp Engine/math.cpp Engine/game.cpp -o Projects/dvd_bouncer/main -lGL -lGLU -lglut -ldl -lm -lglfw -lGLEW -lXi -lXmu  
+

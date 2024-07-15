@@ -1,4 +1,4 @@
-#!/home/admin/github/bleue-mer/.venv/bin/python
+#!/home/admin/git/bleue-mer/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

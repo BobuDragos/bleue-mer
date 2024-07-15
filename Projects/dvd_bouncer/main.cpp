@@ -3,7 +3,8 @@
 
 
 #include "../../Engine/engine.h"
-
+#include <iostream>
+#include <cstdlib>
 void start();
 void update();
 
@@ -40,6 +41,7 @@ void start()
 
 void update()
 {
+  bool collided = false;
   RenderEngine::background(0);
 
   dvd.transform.position += dvd.rigidbody.velocity;
@@ -51,6 +53,7 @@ void update()
     if(dvd.collides(wall))
     {
       dvd.rigidbody.velocity.x = -dvd.rigidbody.velocity.x;
+      collided = true;
     }
   }
 
@@ -59,6 +62,18 @@ void update()
     if(dvd.collides(wall))
     {
       dvd.rigidbody.velocity.y = -dvd.rigidbody.velocity.y;
+      collided = true;
+    }
+  }
+
+  if(collided)
+  {
+   int result = system("python Modules/arduino/turn_on_led.py");
+
+    if (result == 0) {
+        std::cout << "Successfully turned on the LED." << std::endl;
+    } else {
+        std::cout << "Failed to turn on the LED." << std::endl;
     }
   }
 
@@ -66,6 +81,8 @@ void update()
   {
     dvd.transform.position = Vector3::zero;
   }
+
+
 }
 
 
